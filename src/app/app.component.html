@@ -1,0 +1,87 @@
+<h2>Template-driven forms</h2> 
+<div class="wrapper">
+    <form (ngSubmit)="submit(user)" name="user" #user="ngForm">
+      <div class="form-item">
+          <label for="login">Login</label>
+          <input
+           placeholder="Your Login..."
+           name="name"
+           #name = "ngModel"
+           ngModel required
+           pattern="^[a-zA-Z0-9]+$">
+           <p *ngIf="name.invalid && name.touched && name.errors?.['required']">The field must not be empty</p>
+           <p *ngIf="name.invalid && name.touched && name.errors?.['pattern']">Only latin letters and numbers are allowed</p>   
+      </div>
+      <div class="form-item">
+          <label for="email">Email</label>
+          <input 
+          id="email" 
+          placeholder="Your email..." 
+          name="email"
+          #email = "ngModel"
+          ngModel required
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+          <p *ngIf="email.invalid && email.touched && email.errors?.['required']">The field must not be empty</p>
+          <p *ngIf="email.invalid && email.touched && email.errors?.['pattern']">Email is invalid</p>   
+      </div>
+      <div class="form-item">
+        <label for="login">Password</label>
+        <input
+         placeholder="Your password..."
+         name="password"
+         #password = "ngModel"
+         ngModel required minlength="7"
+         pattern="^[a-zA-Z0-9]+$">
+         <p *ngIf="password.invalid && password.touched && password.errors?.['required']">The field must not be empty</p>
+         <p *ngIf="password.invalid && password.touched && password.errors?.['minlength']">
+         You need to enter {{password.errors?.['minlength']['requiredLength']}} characters. You entered is {{password.errors?.['minlength']['actualLength']}} character(-s).
+         </p>
+         <p *ngIf="password.invalid && password.touched && password.errors?.['pattern']">Only latin letters and numbers are allowed</p>   
+    </div>
+      <button type="submit">Submit</button>
+  </form>
+</div>
+
+
+<h2>Reactive forms</h2> 
+<div class="wrapperReactive">
+    <form [formGroup]="form" name="userReact" (ngSubmit)="submitReact()">
+        <div class="form-item">
+            <label for="login">Login</label>
+            <input autocomplete="none" placeholder="Your Login..." formControlName="login">
+                <p *ngIf="form.get('login')?.['invalid'] && form.get('login')?.['touched'] && form.get('login')?.['errors']?.['required']">
+                    The field must not be empty
+                </p>
+                <p *ngIf="form.get('login')?.['invalid'] && form.get('login')?.['touched'] && form.get('login')?.['errors']?.['pattern']">
+                    Only latin letters and numbers are allowed
+                </p>
+        </div>
+        <div class="form-item">
+            <label for="email">Email</label>
+            <input autocomplete="none" id="email" placeholder="Your email..." formControlName="email">
+                <p *ngIf="form.get('email')?.['pending']">Cheking email...</p>
+                <p *ngIf="form.get('email')?.['errors']?.['uniqEmail']">This email already exist</p>
+                <p *ngIf="form.get('email')?.['invalid'] && form.get('email')?.['touched'] && form.get('email')?.['errors']?.['required']">
+                    The field must not be empty
+                </p>
+                <p *ngIf="form.get('email')?.['invalid'] && form.get('email')?.['touched'] && form.get('email')?.['errors']?.['pattern']">
+                    Email is invalid
+                </p>
+        </div>
+        <div class="form-item">
+            <label for="password">Password</label>
+            <input autocomplete="none" id="password" placeholder="Your password..." formControlName="password">
+                <p *ngIf="form.get('password')?.['invalid'] && form.get('password')?.['touched'] && form.get('password')?.['errors']?.['required']">
+                    The field must not be empty
+                </p>
+                <p *ngIf="form.get('password')?.invalid && form.get('password')?.touched && form.get('password')?.errors?.['minlength']">
+                    You need to enter {{form.get('password')?.errors?.['minlength'].requiredLength}} characters.
+                    You entered is {{form.get('password')?.errors?.['minlength'].actualLength}} character(-s).
+                </p>
+                <p *ngIf="form.get('password')?.['invalid'] && form.get('password')?.['touched'] && form.get('password')?.['errors']?.['pattern']">
+                    Only latin letters and numbers are allowed
+                </p>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+  </div>
